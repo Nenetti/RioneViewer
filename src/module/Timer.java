@@ -7,19 +7,20 @@ import config.Config;
 
 public class Timer {
 
-    private static long mm;
+    private static int mm;
 
     private static long start;
     private static long stop;
 
-    public static void addTime (int nn) {
-        Timer.mm += nn;
-        if ( Timer.mm > 1000 ) {
+    public static void addTime (int t) {
+        mm += t;
+        if ( Timer.mm >= 1000 ) {
             if ( Config.LoadableTime > Config.Time ) {
                 Config.addTime(1);
             }
             Timer.mm = 0;
         }
+        Config.MilliTime = mm;
     }
 
     public static void start () {
