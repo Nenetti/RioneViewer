@@ -49,7 +49,6 @@ public class LogReader {
         Config.MapStartY = sy;
         Config.MapEndX = ex;
         Config.MapEndY = ey;
-        System.out.println(sx + " " + sy + " " + ex + " " + ey);
     }
 
     public void read () {
@@ -82,11 +81,12 @@ public class LogReader {
     }
 
     /**
-     * @param fileName
-     * @
+     * 初期の時刻に依存しないAreaログデータの読み込みを行う.
+     *
+     * @param path
      */
-    private void setupArea (String fileName) {
-        File file = new File(fileName);
+    private void setupArea (String path) {
+        File file = new File(path);
         BinaryReader reader = new BinaryReader(file);
         HashMap<Integer, Area> areaMap = new HashMap<>();
         HashMap<Integer, Road> roadMap = new HashMap<>();
@@ -146,8 +146,14 @@ public class LogReader {
         WorldInfo.setAreaMap(areaMap);
     }
 
-    private void updateRoad (String fileName, int time) {
-        File file = new File(fileName);
+    /**
+     * 指定時刻の道路ログデータを読み込む.
+     *
+     * @param path
+     * @param time
+     */
+    private void updateRoad (String path, int time) {
+        File file = new File(path);
 
         BinaryReader reader = new BinaryReader(file);
         HashMap<Integer, Road> roadMap = WorldInfo.getRoadMap();
@@ -162,10 +168,14 @@ public class LogReader {
         }
     }
 
-    /************************************************************************************/
-
-    private void setupBuilding (String fileName) {
-        File file = new File(fileName);
+    /**
+     * 初期の時刻に依存しないBuildingログデータの読み込みを行う.<br>
+     * ただし座標などのRoadとの共通部分など一部パラメータはAreaを利用している
+     *
+     * @param path
+     */
+    private void setupBuilding (String path) {
+        File file = new File(path);
         BinaryReader reader = new BinaryReader(file);
         HashMap<Integer, Area> areaMap = WorldInfo.getAreaMap();
         HashMap<Integer, Building> buildingMap = new HashMap<>();
@@ -207,8 +217,14 @@ public class LogReader {
         WorldInfo.setBuildings(buildingMap);
     }
 
-    private void updateBuilding (String fileName, int time) {
-        File file = new File(fileName);
+    /**
+     * 指定時刻の建物ログデータを読み込む.
+     *
+     * @param path
+     * @param time
+     */
+    private void updateBuilding (String path, int time) {
+        File file = new File(path);
         BinaryReader reader = new BinaryReader(file);
         HashMap<Integer, Building> buildingMap = WorldInfo.getBuildingMap();
 
@@ -236,9 +252,13 @@ public class LogReader {
         }
     }
 
-
-    private void setupHuman (String fileName) {
-        File file = new File(fileName);
+    /**
+     * 初期の時刻に依存しないHumanログデータの読み込みを行う.<br>
+     *
+     * @param path
+     */
+    private void setupHuman (String path) {
+        File file = new File(path);
         BinaryReader reader = new BinaryReader(file);
         HashMap<Integer, Human> humanMap = new HashMap<>();
 
@@ -267,8 +287,14 @@ public class LogReader {
         WorldInfo.setHumans(humanMap);
     }
 
-    private void updateHuman (String fileName, int time) {
-        File file = new File(fileName);
+    /**
+     * 指定時刻のHumanログデータを読み込む.
+     *
+     * @param path
+     * @param time
+     */
+    private void updateHuman (String path, int time) {
+        File file = new File(path);
         BinaryReader reader = new BinaryReader(file);
         HashMap<Integer, Human> humanMap = WorldInfo.getHumanMap();
         while (reader.isReadable()) {
@@ -292,8 +318,14 @@ public class LogReader {
         }
     }
 
-    public void updateTimeStep (String fileName, int time) {
-        File file = new File(fileName);
+    /**
+     * 指定時刻のTimeStepログデータを読み込む.
+     *
+     * @param path
+     * @param time
+     */
+    public void updateTimeStep (String path, int time) {
+        File file = new File(path);
         BinaryReader reader = new BinaryReader(file);
         HashMap<Integer, Human> humanMap = WorldInfo.getHumanMap();
         while (reader.isReadable()) {
@@ -309,6 +341,11 @@ public class LogReader {
         }
     }
 
+    /**
+     * クライント側(Agent側)から送られてきた指定時刻のエージェント全般ログデータを読み込む.
+     *
+     * @param time
+     */
     public void updateSourceAgentInfo (int time) {
         File file = Utility.toFile(String.format("Source/%d/ac", time));
         if ( !file.exists() ) return;
@@ -370,8 +407,6 @@ public class LogReader {
             }
             Human human = WorldInfo.getHuman(entityID);
             if ( human != null ) {
-                // SourceAgentInfoは1フレームずれる
-                // 実際に行動を起こすのは次のフレームのため
                 Area[] path = null;
                 if ( actionType == Category.Action.ActionMove ) {
                     List<Area> list = new ArrayList<>();
@@ -380,6 +415,8 @@ public class LogReader {
                     }
                     path = list.toArray(new Area[0]);
                 }
+                // 1フレームずれる
+                // これは実際に行動を起こすのは次のフレームのため
                 human.updateSource(actionType, detectorTarget, someoneOnBoard, thinkTime, changedEntities, clear_Target,
                         clear_UseOldFunction, clear_X, clear_Y, extinguish_Target, extinguish_power, load_Target,
                         path, move_usePosition, move_X, move_Y, rescue_Target, time + 1);
@@ -387,6 +424,11 @@ public class LogReader {
         }
     }
 
+    /**
+     * クライント側(Agent側)から送られてきた指定時刻のメッセージログデータを読み込む.
+     *
+     * @param time
+     */
     public void updateMessageInfo (int time) {
         File file = Utility.toFile(String.format("Source/%d/me", time));
         if ( !file.exists() ) return;
@@ -410,7 +452,12 @@ public class LogReader {
         }
     }
 
-
+    /**
+     * 指定時刻のBlockadeログデータを読み込む.
+     *
+     * @param fileName
+     * @param time
+     */
     public void updateBlockade (String fileName, int time) {
         File file = new File(fileName);
         System.out.println(file);
@@ -612,13 +659,13 @@ public class LogReader {
 
     private Blockade[] toBlockade (int[] array) {
         List<Blockade> blockades = new ArrayList<>();
-        for (int i = 0; i < array.length; i++) {
-            Blockade b = WorldInfo.getBlockade(array[i]);
+        for (int id : array) {
+            Blockade b = WorldInfo.getBlockade(id);
             if ( b != null ) {
                 blockades.add(b);
             }
         }
-        return blockades.toArray(new Blockade[blockades.size()]);
+        return blockades.toArray(new Blockade[0]);
     }
 
     private int readTime (String path) {
