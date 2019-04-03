@@ -15,6 +15,7 @@ public class Config {
     public static int MapX = 0;
     public static int MapY = 0;
     public static int Time = 1;
+    public static int MilliTime = 0;
     public static int LoadableTime = 0;
     public static int FrameRate = 0;
     public static PlayMode MODE = PlayMode.Play;

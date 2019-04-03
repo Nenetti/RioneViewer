@@ -182,7 +182,7 @@ public class MapPanel extends JPanel {
     }
 
     private void drawBlockade () {
-        if(GUI.SelectPanel.getBlockade().isSelected()){
+        if ( GUI.SelectPanel.getBlockade().isSelected() ) {
             return;
         }
         Collection<Blockade> blockades = WorldInfo.getBlockades();
@@ -213,8 +213,16 @@ public class MapPanel extends JPanel {
     private void drawHuman () {
         Collection<Human> humans = WorldInfo.getHumans();
         for (Human human : humans) {
-            int x = human.getX(Config.Time);
-            int y = human.getY(Config.Time);
+            int x;
+            int y;
+            Step step = human.getStep(Config.Time);
+            if ( step != null ) {
+                x = step.getX(Config.MilliTime / 1000.0);
+                y = step.getY(Config.MilliTime / 1000.0);
+            } else {
+                x = human.getX(Config.Time);
+                y = human.getY(Config.Time);
+            }
             Type type = human.getClassType();
             graphics.setColor(Color.RED);
             switch (type) {
@@ -248,8 +256,8 @@ public class MapPanel extends JPanel {
         for (Human human : humans) {
             Step step = human.getStep(Config.Time);
             if ( step != null ) {
-                int[] xs = step.getXs();
-                int[] ys = step.getYs();
+                int[] xs = step.getShortXs();
+                int[] ys = step.getShortYs();
                 fillCircle(xs[0], ys[0], 5, 5);
                 graphics.drawPolyline(xs, ys, xs.length);
             }

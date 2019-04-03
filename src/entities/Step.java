@@ -51,4 +51,12 @@ public class Step {
     public int[] getShortYs () {
         return shortYs;
     }
+
+    public int getX (double t) {
+        return xs[(int) (xs.length * t)];
+    }
+
+    public int getY (double t) {
+        return ys[(int) (ys.length * t)];
+    }
 }
