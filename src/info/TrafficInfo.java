@@ -6,7 +6,7 @@ import java.util.HashSet;
 import entities.Area;
 import entities.Category;
 import entities.Human;
-import entities.Edge;
+import module.geometry.Edge;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;

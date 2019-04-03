@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Category.Type;
+import module.geometry.Edge;
+import module.geometry.Polygon;
 
 
 
@@ -15,7 +17,7 @@ public abstract class Area extends Entity {
     private int entityID;
     private int x;
     private int y;
-    private Apex apex;
+    private Polygon polygon;
     private Area[] neighbours;
     private Edge[] edge;
 
@@ -26,7 +28,7 @@ public abstract class Area extends Entity {
         this.entityID = entityID;
         this.x = x;
         this.y = y;
-        this.apex = new Apex(apexes);
+        this.polygon = new Polygon(apexes);
     }
 
     public void update (Area[] neighbours, Edge[] edge) {
@@ -46,8 +48,8 @@ public abstract class Area extends Entity {
         return this.y;
     }
 
-    public Apex getApex () {
-        return apex;
+    public Polygon getPolygon () {
+        return polygon;
     }
 
     public Area[] getNeighbours () {

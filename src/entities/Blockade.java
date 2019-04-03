@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import entities.Category.Type;
-import javafx.scene.paint.Color;
+import module.geometry.Polygon;
 
 
 
@@ -14,7 +14,7 @@ public class Blockade extends Entity {
     private int entityID;
     private HashMap<Integer, Integer> x = new HashMap<>();
     private HashMap<Integer, Integer> y = new HashMap<>();
-    private HashMap<Integer, Apex> apexes = new HashMap<>();
+    private HashMap<Integer, Polygon> apexes = new HashMap<>();
     private int position;
     private HashMap<Integer, Integer> repairCost = new HashMap<>();
     private HashSet<Integer> timeStamp = new HashSet<>();
@@ -77,7 +77,7 @@ public class Blockade extends Entity {
     }
 
     public void setApexes (int[] apexes, int time) {
-        this.apexes.put(time, new Apex(apexes));
+        this.apexes.put(time, new Polygon(apexes));
     }
 
     public void setPosition (int position) {
@@ -96,7 +96,7 @@ public class Blockade extends Entity {
         return entityID;
     }
 
-    public Apex getApex (int time) {
+    public Polygon getApex (int time) {
         return apexes.get(time);
     }
 }

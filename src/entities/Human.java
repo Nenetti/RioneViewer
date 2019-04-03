@@ -1,7 +1,6 @@
 package entities;
 
 
-import entities.Category.Action;
 import entities.Category.Type;
 import javafx.scene.image.ImageView;
 
@@ -24,26 +23,9 @@ public class Human extends Entity {
     private HashMap<Integer, Integer> stamina = new HashMap<>();
     private HashMap<Integer, Integer> water = new HashMap<>();
     private HashMap<Integer, Action> action = new HashMap<>();
-    private HashMap<Integer, Integer> detectorTarget = new HashMap<>();
-    private HashMap<Integer, Integer> someoneOnBoard = new HashMap<>();
-    private HashMap<Integer, Long> thinkTime = new HashMap<>();
-    private HashMap<Integer, int[]> changedEntities = new HashMap<>();
-    private HashMap<Integer, Integer> clear_Target = new HashMap<>();
-    private HashMap<Integer, Boolean> clear_UseOldFunction = new HashMap<>();
-    private HashMap<Integer, Integer> clear_X = new HashMap<>();
-    private HashMap<Integer, Integer> clear_Y = new HashMap<>();
-    private HashMap<Integer, Integer> extinguish_Target = new HashMap<>();
-    private HashMap<Integer, Integer> extinguish_power = new HashMap<>();
-    private HashMap<Integer, Integer> load_Target = new HashMap<>();
-    private HashMap<Integer, Area[]> move_path = new HashMap<>();
-    private HashMap<Integer, Boolean> move_usePosition = new HashMap<>();
-    private HashMap<Integer, Integer> move_X = new HashMap<>();
-    private HashMap<Integer, Integer> move_Y = new HashMap<>();
-    private HashMap<Integer, Integer> rescue_Target = new HashMap<>();
-
+    private HashMap<Integer, Step> step = new HashMap<>();
     private HashMap<Integer, Message[]> receivedMessage = new HashMap<>();
     private HashMap<Integer, Message[]> sendMessage = new HashMap<>();
-    private HashMap<Integer, Step> step = new HashMap<>();
 
 
     public enum statusURN {
@@ -88,47 +70,53 @@ public class Human extends Entity {
         setSendMessage(time, sendMessage);
     }
 
-    public void updateSource (Category.Action actionType, int detectorTarget, int someoneOnBoard, long thinkTime, int[] changedEntities, int clear_Target,
-                              boolean clear_UseOldFunction, int clear_X, int clear_Y, int extinguish_Target, int extinguish_power, int load_Target, Area[] move_path,
-                              boolean move_usePosition, int move_X, int move_Y, int rescue_Target, int time) {
-
-        setAction(time, actionType);
-        setDetectorTarget(time, detectorTarget);
-        setSomeoneOnBoard(time, someoneOnBoard);
-        setThinkTime(time, thinkTime);
-        setChangedEntities(time, changedEntities);
-        switch (actionType) {
-            case ActionClear:
-                setClear_Target(time, clear_Target);
-                setClear_UseOldFunction(time, clear_UseOldFunction);
-                setClear_X(time, clear_X);
-                setClear_Y(time, clear_Y);
-                break;
-            case ActionExtinguish:
-                setExtinguish_Target(time, extinguish_Target);
-                setExtinguish_power(time, extinguish_power);
-                break;
-            case ActionLoad:
-                setLoad_Target(time, load_Target);
-                break;
-            case ActionMove:
-                setMove_path(time, move_path);
-                setMove_usePosition(time, move_usePosition);
-                setMove_X(time, move_X);
-                setMove_Y(time, move_Y);
-                break;
-            case ActionRefill:
-                break;
-            case ActionRescue:
-                setRescue_Target(time, rescue_Target);
-                break;
-            case ActionRest:
-                break;
-            case ActionSearch:
-                break;
-            case ActionUnload:
-                break;
-        }
+    public void updateSource (Category.Action actionType, int detectorTarget, int someoneOnBoard, long thinkTime,
+                              int[] changedEntities, int clearTarget, boolean clearUseOldFunction, int clearX,
+                              int clearY, int extinguishTarget, int extinguishPower, int loadTarget, Area[] movePath,
+                              boolean moveUsePosition, int moveX, int moveY, int rescueTarget, int time) {
+        Action action = new Action(actionType, detectorTarget, someoneOnBoard, thinkTime, changedEntities,
+                clearTarget, clearUseOldFunction, clearX, clearY,
+                extinguishTarget, extinguishPower,
+                loadTarget,
+                movePath, moveUsePosition, moveX, moveY, rescueTarget);
+        this.action.put(time, action);
+//         setAction(time, actionType);
+//         setDetectorTarget(time, detectorTarget);
+//         setSomeoneOnBoard(time, someoneOnBoard);
+//         setThinkTime(time, thinkTime);
+//         setChangedEntities(time, changedEntities);
+//         switch (actionType) {
+//             case ActionClear:
+//                 setClear_Target(time, clear_Target);
+//                 setClear_UseOldFunction(time, clear_UseOldFunction);
+//                 setClear_X(time, clear_X);
+//                 setClear_Y(time, clear_Y);
+//                 break;
+//             case ActionExtinguish:
+//                 setExtinguish_Target(time, extinguish_Target);
+//                 setExtinguish_power(time, extinguish_power);
+//                 break;
+//             case ActionLoad:
+//                 setLoad_Target(time, load_Target);
+//                 break;
+//             case ActionMove:
+//                 setMove_path(time, move_path);
+//                 setMove_usePosition(time, move_usePosition);
+//                 setMove_X(time, move_X);
+//                 setMove_Y(time, move_Y);
+//                 break;
+//             case ActionRefill:
+//                 break;
+//             case ActionRescue:
+//                 setRescue_Target(time, rescue_Target);
+//                 break;
+//             case ActionRest:
+//                 break;
+//             case ActionSearch:
+//                 break;
+//             case ActionUnload:
+//                 break;
+//         }
     }
 
 
@@ -176,78 +164,6 @@ public class Human extends Entity {
             return this.action.containsKey(time) && this.hp.containsKey(time);
         }
     }
-
-    public void setAction (int time, Category.Action action) {
-        this.action.put(time, action);
-    }
-
-    public void setDetectorTarget (int time, int detectorTarget) {
-        this.detectorTarget.put(time, detectorTarget);
-    }
-
-    public void setSomeoneOnBoard (int time, int someoneOnBoard) {
-        this.someoneOnBoard.put(time, someoneOnBoard);
-    }
-
-    public void setThinkTime (int time, long thinkTime) {
-        this.thinkTime.put(time, thinkTime);
-    }
-
-    public void setChangedEntities (int time, int[] changedEntities) {
-        this.changedEntities.put(time, changedEntities);
-    }
-
-    public void setClear_Target (int time, int clear_Target) {
-        this.clear_Target.put(time, clear_Target);
-    }
-
-    public void setClear_UseOldFunction (int time, boolean clear_UseOldFunction) {
-        this.clear_UseOldFunction.put(time, clear_UseOldFunction);
-    }
-
-    public void setClear_X (int time, int clear_X) {
-        this.clear_X.put(time, clear_X);
-    }
-
-    public void setClear_Y (int time, int clear_Y) {
-        this.clear_Y.put(time, clear_Y);
-    }
-
-    public void setExtinguish_Target (int time, int extinguish_Target) {
-        this.extinguish_Target.put(time, extinguish_Target);
-    }
-
-    public void setExtinguish_power (int time, int extinguish_power) {
-        this.extinguish_power.put(time, extinguish_power);
-    }
-
-    public void setLoad_Target (int time, int load_Target) {
-        this.load_Target.put(time, load_Target);
-    }
-
-    public void setMove_path (int time, Area[] move_path) {
-        this.move_path.put(time, move_path);
-    }
-
-    public void setMove_usePosition (int time, boolean move_usePosition) {
-        this.move_usePosition.put(time, move_usePosition);
-    }
-
-    public void setMove_X (int time, int move_X) {
-        this.move_X.put(time, move_X);
-    }
-
-    public void setMove_Y (int time, int move_Y) {
-        this.move_Y.put(time, move_Y);
-    }
-
-    public void setRescue_Target (int time, int rescue_Target) {
-        this.rescue_Target.put(time, rescue_Target);
-    }
-
-
-    /*****************************************************************************/
-
 
     public void setEntityID (int entityID) {
         this.entityID = entityID;
@@ -310,11 +226,6 @@ public class Human extends Entity {
         return buriedness.get(time);
     }
 
-    public int getSomeoneOnBoard (int time) {
-        return someoneOnBoard.get(time);
-    }
-
-
     public int getHP (int time) {
         return hp.get(time);
     }
@@ -343,15 +254,6 @@ public class Human extends Entity {
     public int getY (int time) {
         return y.get(time);
     }
-
-    public Category.Action getAction (int time) {
-        return action.get(time);
-    }
-
-    public Area[] getMove_path (int time) {
-        return move_path.get(time);
-    }
-
 
     public statusURN[] getStatuses (int time) {
         List<statusURN> list = new ArrayList<>();
