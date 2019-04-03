@@ -1,11 +1,11 @@
-package entities;
+package module.geometry;
 
-public class Apex {
+public class Polygon {
 
     private int[] apexesX;
     private int[] apexesY;
 
-    public Apex (int[] apexes) {
+    public Polygon (int[] apexes) {
         int length = apexes.length / 2;
         int[] apexesX = new int[length];
         int[] apexesY = new int[length];

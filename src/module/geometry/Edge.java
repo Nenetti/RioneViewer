@@ -1,4 +1,8 @@
-package entities;
+package module.geometry;
+
+
+import entities.Area;
+
 
 
 public class Edge {
